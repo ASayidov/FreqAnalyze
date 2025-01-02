@@ -104,13 +104,13 @@ def parse_text_file_testne(file_path, region_code):
 # "О программе" ойнаси
 def show_about():
     about_text = (
-        "Программа: Анализатор Частот\n"
+        "Программа: Анализатор Частот GSM\n"
         "Версия: 1.0\n"
         "Цель программы: Анализ частот для GSM-сетей,\n"
-        "включая поиск одинаковых и соседних частот в заданном радиусе.\n\n"
+        "включая поиск одинаковых и смежных частот в заданном радиусе.\n\n"
         "Автор: Абдуллажон Сайидов\n"
-        "Электронная почта: abdullajonsayidov@mail.com\n"
-        "Технические требования: Windows 10/11, Python 3.8 или выше."
+        "Электронная почта: abdullajonsayidov@gmail.com\n"
+        "Технические требования: Windows 10/11."
     )
     messagebox.showinfo("О программе", about_text)
 
@@ -124,7 +124,7 @@ def open_testne_window():
     new_window = Toplevel(root)
     new_window.title("Testne Analysis")
     new_window.transient(root)  # Асосий ойна орқада қолиши учун
-    FrequencyAnalyzerApp(new_window, parse_text_file_function=parse_text_file_testne, analyze_function=analyze_adjacent_frequencies, title="Определение соседных частот")
+    FrequencyAnalyzerApp(new_window, parse_text_file_function=parse_text_file_testne, analyze_function=analyze_adjacent_frequencies, title="Определение смежных частот")
 
 class FrequencyAnalyzerApp:
     def __init__(self, root, parse_text_file_function=None, analyze_function=None, title=""):
@@ -231,18 +231,32 @@ class FrequencyAnalyzerApp:
         else:
             self.status_label.config(text="No analysis results to save.")
 
+# def process_excel_file(file_path):
+#     df = pd.read_excel(file_path, sheet_name=0)
+#     bases = []
+#     for _, row in df.iterrows():
+#         base_number = str(row["BSNum"]).strip()
+#         bases.append({
+#             "Base Name": row["BSName"],
+#             "Base Number": base_number,
+#             "Latitude": row["Lat"],
+#             "Longitude": row["Lon"],
+#             "Azimuth 900": row.get("GSM-900", None),
+#             "Azimuth 1800": row.get("GSM-1800", None)
+#         })
+#     return bases
+
 def process_excel_file(file_path):
     df = pd.read_excel(file_path, sheet_name=0)
     bases = []
     for _, row in df.iterrows():
-        base_number = str(row["BSNum"]).strip()
         bases.append({
-            "Base Name": row["BSName"],
-            "Base Number": base_number,
-            "Latitude": row["Lat"],
-            "Longitude": row["Lon"],
-            "Azimuth 900": row.get("GSM-900", None),
-            "Azimuth 1800": row.get("GSM-1800", None)
+            "Base Name": row.iloc[1],  # 2-устун
+            "Base Number": str(row.iloc[2]).strip(),  # 2-устун
+            "Latitude": row.iloc[4],  # 3-устун
+            "Longitude": row.iloc[5],  # 5-устун
+            "Azimuth 900": row.iloc[6] if len(row) > 4 else None,  # 6-устун
+            "Azimuth 1800": row.iloc[7] if len(row) > 5 else None  # 7-устун
         })
     return bases
 
@@ -429,7 +443,7 @@ def main():
 
     testne_button = Button(
         root,
-        text="Определение соседних частот в заданном радиусе",
+        text="Определение смежных частот в заданном радиусе",
         command=open_testne_window,
         width=55,
         height=2
