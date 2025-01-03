@@ -291,7 +291,7 @@ def analyze_same_frequencies(text_data, excel_data, distance_limit, status_label
                     })
         if not matched:
             print(f"No match for Base Number: {base_text['Base Number']} in Excel data")
-        status_label.config(text=f"Обработка: {i+1}/{total_bases} баз")
+        status_label.config(text=f"Обработка: {i+1}/{total_bases} сектора")
         status_label.update_idletasks()
     return results
 
@@ -323,7 +323,7 @@ def analyze_adjacent_frequencies(text_data, excel_data, distance_limit, status_l
                     })
         if not matched:
             print(f"No match for Base Number: {base_text['Base Number']} in Excel data")
-        status_label.config(text=f"Обработка: {i+1}/{total_bases} баз")
+        status_label.config(text=f"Обработка: {i+1}/{total_bases} сектора")
         status_label.update_idletasks()
     return results
 
